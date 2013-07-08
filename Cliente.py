@@ -1,9 +1,9 @@
 import socket,threading, time, pickle
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 
-class Cliente(threading.Thread):
+class Cliente(QtCore.QThread):
     def __init__(self, gui,dir):
-        threading.Thread.__init__(self)
+        super(Cliente,self).__init__()
         self.gui=gui
         try:
             self.c = socket.socket() 
@@ -31,10 +31,12 @@ class Cliente(threading.Thread):
                     self.gui.matriz[x][y].setIcon(QtGui.QIcon(""))
                     self.gui.matriz[x][y].setNombre("vacio")
                     self.gui.matriz[x][y].setColorPieza("vacio")
+                    print x, y, 
                     x2 = pickle.load(f)
                     y2 = pickle.load(f)
                     nombre = pickle.load(f)
                     color = pickle.load(f)
+                    print x2, y2, nombre, color
                     self.gui.matriz[x2][y2].setIcon(QtGui.QIcon("images/"+nombre+".gif"))
                     self.gui.matriz[x2][y2].setNombre(nombre)
                     self.gui.matriz[x2][y2].setColorPieza(color)

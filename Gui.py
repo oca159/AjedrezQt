@@ -40,8 +40,6 @@ class Gui(QtGui.QMainWindow):
         conectar=menu.addMenu("&Conectar")
         conectar.addAction(cliente)
         conectar.addAction(servidor)
-        
-        #self.cargarC()
         self.show()
 
     def cargarC(self):
@@ -203,33 +201,33 @@ class Gui(QtGui.QMainWindow):
                 print self.nombrePieza
                 source.setIcon(QtGui.QIcon("images/"+pieza+".gif"))
                 
-            if self.modo=="servidor": 
-                with open("datos.dat","wb") as f:
-                    pickle.dump(self.turno,f,2)
-                    pickle.dump(self.ant.x(),f,2)  #Envio la coordenada en x de la posicion a desaparecer
-                    pickle.dump(self.ant.y(),f,2)   #Envio la coordenada en y de la posicion a desaparecer
-                    pickle.dump(self.act.x(),f,2)  #Envio la coordenada en x de la posicion en donde aparecera
-                    pickle.dump(self.act.y(),f,2)   #Envio la coordenada en y de la posicion en donde aparecera
-                    pickle.dump(self.nombrePieza,f,2)   #Envio el nombre de la pieza
-                    pickle.dump(self.colorPieza,f,2)    #Envio el color
-                    
-                with open("datos.dat","rb") as f:
-                    cad=f.read()
-                    self.servidor.sc.send(cad)
-                    
                     
             if self.modo=="cliente":
                 with open("datos.dat","wb") as f:
                     pickle.dump(self.turno,f,2)
-                    pickle.dump(self.ant.x(),f,2)  #Envio la coordenada en x de la posicion a desaparecer
-                    pickle.dump(self.ant.y(),f,2)   #Envio la coordenada en y de la posicion a desaparecer
-                    pickle.dump(self.act.x(),f,2)  #Envio la coordenada en x de la posicion en donde aparecera
-                    pickle.dump(self.act.y(),f,2)   #Envio la coordenada en y de la posicion en donde aparecera
-                    pickle.dump(self.nombrePieza,f,2)   #Envio el nombre de la pieza
-                    pickle.dump(self.colorPieza,f,2)    #Envio el color
+                    pickle.dump(self.ant.x(),f,2)  
+                    pickle.dump(self.ant.y(),f,2)   
+                    pickle.dump(self.act.x(),f,2)  
+                    pickle.dump(self.act.y(),f,2)   
+                    pickle.dump(self.nombrePieza,f,2)   
+                    pickle.dump(self.colorPieza,f,2)   
                 with open("datos.dat","rb") as f:
                     cad=f.read()
                     self.cliente.c.send(cad)
+                    
+                    
+            if self.modo=="servidor": 
+                with open("datos.dat","wb") as f:
+                    pickle.dump(self.turno,f,2)
+                    pickle.dump(self.ant.x(),f,2)  
+                    pickle.dump(self.ant.y(),f,2)   
+                    pickle.dump(self.act.x(),f,2)  
+                    pickle.dump(self.act.y(),f,2)   
+                    pickle.dump(self.nombrePieza,f,2)   
+                    pickle.dump(self.colorPieza,f,2)    
+                with open("datos.dat","rb") as f:
+                    cad=f.read()
+                    self.servidor.sc.send(cad)
                 
                 
     def pintaTablero(self):

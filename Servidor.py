@@ -1,9 +1,9 @@
 import socket,threading,time,pickle
-from PyQt4 import QtGui
+from PyQt4 import QtGui, QtCore
 
-class Servidor(threading.Thread):
+class Servidor(QtCore.QThread):
     def __init__(self, gui):
-        threading.Thread.__init__(self)
+        super(Servidor,self).__init__()
         self.gui=gui
         try:
             s = socket.socket()
