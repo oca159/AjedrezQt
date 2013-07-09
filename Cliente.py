@@ -15,31 +15,29 @@ class Cliente(QtCore.QThread):
             self.c.close()
         
     def run(self):
-        try:
-            while True:
-                self.cad = self.c.recv(80)
-                self.gui.actual.setText("Jugador actual: Negras")
-                with open("datosc.dat","wb") as f:
-                    f.write(self.cad)
-                f = file("datosc.dat")
-                self.gui.turno = pickle.load(f)
-                if self.gui.turno == True:
-                    self.gui.rein()
-                else:
-                    x= pickle.load(f)
-                    y=pickle.load(f)
-                    self.gui.matriz[x][y].setIcon(QtGui.QIcon(""))
-                    self.gui.matriz[x][y].setNombre("vacio")
-                    self.gui.matriz[x][y].setColorPieza("vacio")
-                    print x, y, 
-                    x2 = pickle.load(f)
-                    y2 = pickle.load(f)
-                    nombre = pickle.load(f)
-                    color = pickle.load(f)
-                    print x2, y2, nombre, color
-                    self.gui.matriz[x2][y2].setIcon(QtGui.QIcon("images/"+nombre+".gif"))
-                    self.gui.matriz[x2][y2].setNombre(nombre)
-                    self.gui.matriz[x2][y2].setColorPieza(color)
-                time.sleep(0.1)
-        except:
-            pass
+        while True:
+            self.cad = self.c.recv(100)
+            self.gui.actual.setText("Jugador actual: Negras")
+            with open("datosc.dat","wb") as f:
+                f.write(self.cad)
+            f = file("datosc.dat","rb")
+            self.gui.turno = pickle.load(f)
+            print self.gui.turno
+            if self.gui.turno == True:
+                self.gui.rein()
+            else:
+                x = pickle.load(f)
+                y = pickle.load(f)
+                self.gui.matriz[x][y].setIcon(QtGui.QIcon(""))
+                self.gui.matriz[x][y].setNombre("vacio")
+                self.gui.matriz[x][y].setColorPieza("vacio") 
+                x2 = pickle.load(f)
+                y2 = pickle.load(f)
+                print x2, y2
+                nombre = pickle.load(f)
+                print "llego bien 1"
+                self.gui.matriz[x2][y2].setIcon(QtGui.QIcon("images/"+nombre+".gif"))
+                self.gui.matriz[x2][y2].setNombre(nombre)
+                self.gui.matriz[x2][y2].setColorPieza("blancas")
+            time.sleep(0.1)
+        

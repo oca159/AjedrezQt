@@ -195,40 +195,40 @@ class Gui(QtGui.QMainWindow):
                     ok=False
                     while ok==False:
                         pieza, ok= QtGui.QInputDialog.getItem(self, "Coronar", "Escoge una pieza: ", self.coronaR)
-                
+                        
                 source.setNombre(pieza)
-                self.nombrePieza=pieza
-                print self.nombrePieza
+                self.nombrePieza=str(pieza)
                 source.setIcon(QtGui.QIcon("images/"+pieza+".gif"))
                 
                     
             if self.modo=="cliente":
-                with open("datos.dat","wb") as f:
+                with open("datos.dat",'wb') as f:
                     pickle.dump(self.turno,f,2)
                     pickle.dump(self.ant.x(),f,2)  
                     pickle.dump(self.ant.y(),f,2)   
                     pickle.dump(self.act.x(),f,2)  
                     pickle.dump(self.act.y(),f,2)   
-                    pickle.dump(self.nombrePieza,f,2)   
-                    pickle.dump(self.colorPieza,f,2)   
-                with open("datos.dat","rb") as f:
+                    pickle.dump(self.nombrePieza,f,2)
+                    #self.colorPieza=str(self.colorPieza)   
+                    #pickle.dump(self.colorPieza,f,2)   
+                with open("datos.dat",'rb') as f:
                     cad=f.read()
                     self.cliente.c.send(cad)
                     
                     
             if self.modo=="servidor": 
-                with open("datos.dat","wb") as f:
+                with open("datos.dat",'wb') as f:
                     pickle.dump(self.turno,f,2)
                     pickle.dump(self.ant.x(),f,2)  
                     pickle.dump(self.ant.y(),f,2)   
                     pickle.dump(self.act.x(),f,2)  
                     pickle.dump(self.act.y(),f,2)   
-                    pickle.dump(self.nombrePieza,f,2)   
-                    pickle.dump(self.colorPieza,f,2)    
-                with open("datos.dat","rb") as f:
+                    pickle.dump(self.nombrePieza,f,2)
+                    #self.colorPieza=str(self.colorPieza)      
+                    #pickle.dump(self.colorPieza,f,2)   
+                with open("datos.dat",'rb') as f:
                     cad=f.read()
                     self.servidor.sc.send(cad)
-                
                 
     def pintaTablero(self):
         color = True
