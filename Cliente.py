@@ -22,7 +22,6 @@ class Cliente(QtCore.QThread):
                 f.write(self.cad)
             f = file("datosc.dat","rb")
             self.gui.turno = pickle.load(f)
-            print self.gui.turno
             if self.gui.turno == True:
                 self.gui.rein()
             else:
@@ -33,9 +32,9 @@ class Cliente(QtCore.QThread):
                 self.gui.matriz[x][y].setColorPieza("vacio") 
                 x2 = pickle.load(f)
                 y2 = pickle.load(f)
-                print x2, y2
                 nombre = pickle.load(f)
-                print "llego bien 1"
+                if self.gui.matriz[x2][y2].getNombre()=="reyR":
+                    break
                 self.gui.matriz[x2][y2].setIcon(QtGui.QIcon("images/"+nombre+".gif"))
                 self.gui.matriz[x2][y2].setNombre(nombre)
                 self.gui.matriz[x2][y2].setColorPieza("blancas")

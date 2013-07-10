@@ -39,6 +39,8 @@ class Servidor(QtCore.QThread):
                 x2 = pickle.load(f)
                 y2 = pickle.load(f)
                 nombre = pickle.load(f)
+                if self.gui.matriz[x2][y2].getNombre()=="reyB":
+                    break
                 self.gui.matriz[x2][y2].setIcon(QtGui.QIcon("images/"+nombre+".gif"))
                 self.gui.matriz[x2][y2].setNombre(nombre)
                 self.gui.matriz[x2][y2].setColorPieza("negras")

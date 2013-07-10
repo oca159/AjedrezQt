@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt4 import QtGui, QtCore
-import sys,Button, pickle
+import sys,Button, pickle, time
 import Movimientos as mov
 import Cliente, Servidor
 
@@ -166,9 +166,9 @@ class Gui(QtGui.QMainWindow):
                 mov.validaCaballo(self,source)
             
         elif source.getColor()=="cyan":
-            if source.getNombre()=="reyB" or source.getNombre()=="reyR":
+            """if source.getNombre()=="reyB" or source.getNombre()=="reyR":
                 self.turno=not(self.turno)
-                self.rendir()
+                self.rendir()"""
                 
                 
             
@@ -209,8 +209,6 @@ class Gui(QtGui.QMainWindow):
                     pickle.dump(self.act.x(),f,2)  
                     pickle.dump(self.act.y(),f,2)   
                     pickle.dump(self.nombrePieza,f,2)
-                    #self.colorPieza=str(self.colorPieza)   
-                    #pickle.dump(self.colorPieza,f,2)   
                 with open("datos.dat",'rb') as f:
                     cad=f.read()
                     self.cliente.c.send(cad)
@@ -223,9 +221,7 @@ class Gui(QtGui.QMainWindow):
                     pickle.dump(self.ant.y(),f,2)   
                     pickle.dump(self.act.x(),f,2)  
                     pickle.dump(self.act.y(),f,2)   
-                    pickle.dump(self.nombrePieza,f,2)
-                    #self.colorPieza=str(self.colorPieza)      
-                    #pickle.dump(self.colorPieza,f,2)   
+                    pickle.dump(self.nombrePieza,f,2) 
                 with open("datos.dat",'rb') as f:
                     cad=f.read()
                     self.servidor.sc.send(cad)
@@ -254,20 +250,7 @@ class Gui(QtGui.QMainWindow):
         self.wid.resize(400,400)
         self.wid.setVisible(True)
         self.cargarC()
-        if self.modo=="servidor":
-            reiniciado=True
-            with open("datos.dat","wb") as f:
-                pickle.dump(reiniciado, f, 2)  #Envio la bandera 
-            with open("datos.dat","rb") as f:
-                cad=f.read()
-                self.servidor.sc.send(cad)
-        else:
-            reiniciado=False
-            with open("datos.dat","wb") as f:
-                pickle.dump(reiniciado, f, 2)  #Envio la bandera 
-            with open("datos.dat","rb") as f:
-                cad=f.read()
-                self.cliente.c.send(cad)
+        time.sleep(5)
         
     def rendir(self):
         if self.turno==True:
