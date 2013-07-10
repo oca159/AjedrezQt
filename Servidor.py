@@ -5,6 +5,8 @@ class Servidor(QtCore.QThread):
     def __init__(self, gui):
         super(Servidor,self).__init__()
         self.gui=gui
+        self.signal=QtCore.SIGNAL("signal")
+        self.sig=QtCore.SIGNAL("senal")
         try:
             s = socket.socket()
             s.bind(("localhost",9999))
@@ -14,7 +16,7 @@ class Servidor(QtCore.QThread):
             self.gui.modo="servidor"
             self.gui.statusBar().showMessage("Conectado como servidor")
             s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        except Exception as e:
+        except Exception:
             s.close()
         except:
             self.sc.close()
@@ -29,7 +31,7 @@ class Servidor(QtCore.QThread):
             f= file("datos.dat",'rb')
             self.gui.turno = pickle.load(f)
             if self.gui.turno == False:
-                self.gui.rein()
+                self.emit(QtCore.SIGNAL("reiniciarJuego"))
             else:
                 x= pickle.load(f)
                 y=pickle.load(f)
@@ -40,9 +42,13 @@ class Servidor(QtCore.QThread):
                 y2 = pickle.load(f)
                 nombre = pickle.load(f)
                 if self.gui.matriz[x2][y2].getNombre()=="reyB":
-                    break
-                self.gui.matriz[x2][y2].setIcon(QtGui.QIcon("images/"+nombre+".gif"))
+                    self.emit(self.sig)
+                    continue
+                image=QtGui.QImage()
+                image.load(QtCore.QString.fromUtf8("images/"+nombre+".gif"))
+                self.emit(self.signal,image,x2,y2)
                 self.gui.matriz[x2][y2].setNombre(nombre)
                 self.gui.matriz[x2][y2].setColorPieza("negras")
             time.sleep(0.1)
+    
     

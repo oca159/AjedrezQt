@@ -44,6 +44,7 @@ class Gui(QtGui.QMainWindow):
 
     def cargarC(self):
         self.turno=True
+        self.ganar=False
         self.actual.setText("Jugador actual: Blancas")
         self.grid = QtGui.QGridLayout()
         self.nombresPiezas = [(
@@ -166,11 +167,8 @@ class Gui(QtGui.QMainWindow):
                 mov.validaCaballo(self,source)
             
         elif source.getColor()=="cyan":
-            """if source.getNombre()=="reyB" or source.getNombre()=="reyR":
-                self.turno=not(self.turno)
-                self.rendir()"""
-                
-                
+            if source.getNombre()=="reyB" or source.getNombre()=="reyR":
+                self.ganar=True
             
             self.matriz[self.ant.x()][self.ant.y()].setIcon(QtGui.QIcon(""))
             self.matriz[self.ant.x()][self.ant.y()].setNombre("vacio")
@@ -225,6 +223,11 @@ class Gui(QtGui.QMainWindow):
                 with open("datos.dat",'rb') as f:
                     cad=f.read()
                     self.servidor.sc.send(cad)
+            
+            if self.ganar:
+                self.rendir()
+
+                
                 
     def pintaTablero(self):
         color = True
@@ -267,20 +270,23 @@ class Gui(QtGui.QMainWindow):
             dir, ok=QtGui.QInputDialog.getText(self, "Conectar a", "Teclea la direccion a la que se desea conectar")
         
         self.cliente= Cliente.Cliente(self,dir)
+        self.connect(self.cliente, self.cliente.signal, self.makeIcon)
+        self.connect(self.cliente, self.cliente.sig, self.rendir)
         self.cliente.start()
     
     def conectaServidor(self):
         self.setWindowTitle("Servidor")
         self.servidor= Servidor.Servidor(self)
+        self.connect(self.servidor, self.servidor.signal, self.makeIcon)
+        self.connect(self.servidor, self.servidor.sig, self.rendir)
         self.servidor.start()
             
         
-    def rein(self):
-        self.wid.deleteLater()
-        self.wid = QtGui.QFrame(self)
-        self.wid.resize(400,400)
-        self.wid.setVisible(True)
-        self.cargarC()    
+    def makeIcon(self,image,x2,y2):
+        pixmap=QtGui.QPixmap(50,50)
+        pixmap.convertFromImage(image)
+        self.matriz[x2][y2].setIcon(QtGui.QIcon(pixmap))
+          
             
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
