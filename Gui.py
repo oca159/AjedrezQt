@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt4 import QtGui, QtCore
-import sys,Button, pickle, time
+import sys,Button, pickle
 import Movimientos as mov
 import Cliente, Servidor
 
@@ -17,14 +17,12 @@ class Gui(QtGui.QMainWindow):
         self.wid = QtGui.QFrame(self)
         self.wid.resize(400, 400)
         self.modo=""
-        self.reiniciar=QtGui.QPushButton("Reiniciar",self)
+        self.reiniciar=QtGui.QPushButton("Rendirse",self)
         self.reiniciar.setGeometry(390,450,60,25)
-        self.reiniciar.clicked.connect(self.reiniciarJuego)
+        self.reiniciar.clicked.connect(self.rein)
+        self.reiniciar.setVisible(False)
         self.actual=QtGui.QLabel("Jugador actual: Blancas",self)
         self.actual.setGeometry(20,450,150,30)
-        self.rendirse=QtGui.QPushButton("Rendirse",self)
-        self.rendirse.setGeometry(300,450,60,25)
-        self.rendirse.clicked.connect(self.rendir)
         self.coronaB=QtCore.QStringList(["reinaB","caballoB","alfilB","torreB"])
         self.coronaR=QtCore.QStringList(["reinaR","caballoR","alfilR","torreR"])
         
@@ -45,6 +43,7 @@ class Gui(QtGui.QMainWindow):
     def cargarC(self):
         self.turno=True
         self.ganar=False
+        self.reiniciar.setVisible(True)
         self.actual.setText("Jugador actual: Blancas")
         self.grid = QtGui.QGridLayout()
         self.nombresPiezas = [(
@@ -253,7 +252,27 @@ class Gui(QtGui.QMainWindow):
         self.wid.resize(400,400)
         self.wid.setVisible(True)
         self.cargarC()
-        time.sleep(5)
+        
+    def rein(self):
+        self.wid.deleteLater()
+        self.wid = QtGui.QFrame(self)
+        self.wid.resize(400,400)
+        self.wid.setVisible(True)
+        self.cargarC()
+        if self.modo=="servidor":
+            with open("datos.dat",'wb') as f:
+                self.turno=True
+                pickle.dump(self.turno,f,2) 
+            with open("datos.dat",'rb') as f:
+                cad=f.read()
+                self.servidor.sc.send(cad)
+        else:
+            with open("datos.dat",'wb') as f:
+                self.turno=False
+                pickle.dump(self.turno,f,2)
+            with open("datos.dat",'rb') as f:
+                cad=f.read()
+                self.cliente.c.send(cad)
         
     def rendir(self):
         if self.turno==True:

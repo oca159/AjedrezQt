@@ -1,4 +1,4 @@
-import socket,threading,time,pickle
+import socket,time,pickle
 from PyQt4 import QtGui, QtCore
 
 class Servidor(QtCore.QThread):
@@ -31,7 +31,7 @@ class Servidor(QtCore.QThread):
             f= file("datos.dat",'rb')
             self.gui.turno = pickle.load(f)
             if self.gui.turno == False:
-                self.emit(QtCore.SIGNAL("reiniciarJuego"))
+                self.emit(self.sig)
             else:
                 x= pickle.load(f)
                 y=pickle.load(f)

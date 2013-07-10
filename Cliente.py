@@ -1,8 +1,8 @@
-import socket,threading, time, pickle
+import socket, time, pickle
 from PyQt4 import QtGui, QtCore
 
 class Cliente(QtCore.QThread):
-    def __init__(self, gui,dir):
+    def __init__(self, gui, dir):
         super(Cliente,self).__init__()
         self.gui=gui
         self.signal=QtCore.SIGNAL("signal")
@@ -25,7 +25,7 @@ class Cliente(QtCore.QThread):
             f = file("datosc.dat","rb")
             self.gui.turno = pickle.load(f)
             if self.gui.turno == True:
-                pass
+                self.emit(self.sig)
             else:
                 x = pickle.load(f)
                 y = pickle.load(f)
